@@ -15,21 +15,21 @@ type FirebaseQuestions = Record<string, {
     name: string;
     avatar: string;
   }
-  content: string;
-  isAnswered: boolean;
+  content: string;  
   isHighlighted: boolean;
-
+  isAnswered: boolean;
 }>
 
-type Question ={
+type Question = { 
   id: string;
   author: {
     name: string;
     avatar: string;
   }
   content: string;
-  isAnswered: boolean;
   isHighlighted: boolean;
+  isAnswered: boolean;
+  
 }
 
 type RoomParams = {
@@ -49,21 +49,20 @@ const Room = () => {
     const roomRef = database.ref(`rooms/${roomID}`);
 
     roomRef.on('value', room => {
-      console.log(room.val());
       const databaseRoom = room.val();
       const firebaseQuestions: FirebaseQuestions = databaseRoom.questions ?? {};
 
       const parsedQuestions = Object.entries(firebaseQuestions).map(([key, value]) => {
         return {
           id: key,
-          content: value.content,
           author: value.author,
+          content: value.content,
           isHighlighted: value.isHighlighted,
-          isAnswererd: value.isAnswered
+          isAnswered: value.isAnswered
         }
       })
 
-      
+      console.log(parsedQuestions)
       setTitle(databaseRoom.title)
       setQuestions(parsedQuestions)
     })
@@ -129,6 +128,7 @@ const Room = () => {
             <Button type="submit" disabled={!user}>Enviar pergunta</Button>
           </div>
         </form>
+      {JSON.stringify(questions)}
       </main>
     </div>
   );
