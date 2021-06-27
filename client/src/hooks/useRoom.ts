@@ -9,8 +9,8 @@ type FirebaseQuestions = Record<string, {
     avatar: string;
   }
   content: string;
-  isHighlighted: boolean;
   isAnswered: boolean;
+  isHighlighted: boolean;
   likes: Record<string, {
     authorId: string;
   }>
@@ -23,17 +23,17 @@ type QuestionType = {
     avatar: string;
   }
   content: string;
-  isHighlighted: boolean;
   isAnswered: boolean;
-  likeCount:number;
+  isHighlighted: boolean;
+  likeCount: number;
   likeId: string | undefined;
 }
 
 
 const useRoom = (roomID: string) => {
-  const { user } = useAuth()
+  const { user } = useAuth();
   const [questions, setQuestions] = useState<QuestionType[]>([])
-  const [title, setTitle] = useState('')
+  const [title, setTitle] = useState('');
 
   useEffect(() => {
     const roomRef = database.ref(`rooms/${roomID}`);
@@ -45,13 +45,12 @@ const useRoom = (roomID: string) => {
       const parsedQuestions = Object.entries(firebaseQuestions).map(([key, value]) => {
         return {
           id: key,
-          author: value.author,
           content: value.content,
+          author: value.author,
           isHighlighted: value.isHighlighted,
           isAnswered: value.isAnswered,
           likeCount: Object.values(value.likes ?? {}).length,
-          // hasLiked: Object.values(value.likes ?? {}).some(like => like.authorId === user?.id)
-          likedId: Object.entries(value.likes ?? {}).find(([key, like]) => like.authorId === user?.id)?.[0],
+          likeId: Object.entries(value.likes ?? {}).find(([key, like]) => like.authorId === user?.id)?.[0],
         }
       })
 
